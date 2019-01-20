@@ -8,10 +8,12 @@ class ScheduleBoardItem(models.Model):
     PROCESSING = 'PR'
     IN_QUEUE = 'IQ'
     FINISHED= 'FN'
+    KILLED = 'KL'
     TASK_STATES = (
         (PROCESSING, 'Processing'),
         (IN_QUEUE, 'In Queue'),
         (FINISHED, 'Finished'),
+        (KILLED, 'Killed'),
     )
 
     XILINX = 'XL'
@@ -27,9 +29,11 @@ class ScheduleBoardItem(models.Model):
     extra_environment = models.TextField(default='', max_length=1024, blank=True, null=True)
     command = models.CharField(default='', max_length=256)
     working_dir = models.CharField(default='', max_length=256)
-    state = models.CharField(choices=TASK_STATES, max_length=2, default=IN_QUEUE, blank=True)
+    priority = models.IntegerField(default=0, blank=True, null=False)
     kind_of_task = models.CharField(choices=TASK_CHOICES, max_length=2, default=XILINX, blank=True)
+    state = models.CharField(choices=TASK_STATES, max_length=2, default=IN_QUEUE, blank=True)
     log = models.ForeignKey(SchedulerLog, default=None, on_delete=models.SET_NULL, blank=True, null=True)
+    pid = models.IntegerField(default=0, null=True, blank=True)
     started = models.DateTimeField(default=None, null=True, blank=True)
     finished = models.DateTimeField(default=None, null=True, blank=True)
 
@@ -55,7 +59,15 @@ class ScheduleBoardItem(models.Model):
         self.state = self.FINISHED
         self.finished = timezone.now()
         self.log = log
+        self.pid = 0
         self.save()
+
+    def mark_as_killed(self):
+        self.state = self.KILLED
+        self.finished = timezone.now()
+        self.pid = 0
+        self.save()
+
 
     def mark_as_processing(self, log):
         self.state = self.PROCESSING
