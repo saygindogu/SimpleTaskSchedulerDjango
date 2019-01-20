@@ -1,0 +1,2 @@
+export HEBELE=HOP
+export ZUBI=ZARETTA
