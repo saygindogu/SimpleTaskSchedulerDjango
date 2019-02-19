@@ -260,3 +260,6 @@ fabric.properties
 
 .idea
 # End of https://www.gitignore.io/api/python,django,pycharm
+
+*.pickle
+**/credentials.json

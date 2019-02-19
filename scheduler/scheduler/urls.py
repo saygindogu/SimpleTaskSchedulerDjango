@@ -20,5 +20,5 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('kill/<int:board_item_id>', views.current_datetime, name='kill-process'),
+    path('kill/<int:board_item_id>', views.kill_process, name='kill-process'),
 ]

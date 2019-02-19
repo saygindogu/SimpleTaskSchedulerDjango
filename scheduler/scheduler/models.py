@@ -29,6 +29,7 @@ class ScheduleBoardItem(models.Model):
     extra_environment = models.TextField(default='', max_length=1024, blank=True, null=True)
     command = models.CharField(default='', max_length=256)
     working_dir = models.CharField(default='', max_length=256)
+    timeslot_duration = models.IntegerField(default=5, blank=False)
     priority = models.IntegerField(default=0, blank=True, null=False)
     kind_of_task = models.CharField(choices=TASK_CHOICES, max_length=2, default=XILINX, blank=True)
     state = models.CharField(choices=TASK_STATES, max_length=2, default=IN_QUEUE, blank=True)

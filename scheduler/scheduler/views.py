@@ -3,7 +3,7 @@ import psutil
 from scheduler.models import ScheduleBoardItem
 import time
 
-def current_datetime(request, board_item_id):
+def kill_process(request, board_item_id):
     board_item = ScheduleBoardItem.objects.get(id=board_item_id)
     if board_item.pid == 0:
         html = "<html><body>Item {} is not running. (pid: {}).</body></html>".format(board_item_id, board_item.pid)
